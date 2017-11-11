@@ -13,8 +13,9 @@ class ViewController: UIViewController {
     // MARK - Properties
     var userIsInMiddleOfTyping = false
     
-    // computed property that will always handle
-    // what is in the display as a Double
+    // computed property
+    // converts the text in the display to a Double
+    // displays values in the display as a String
     var displayValue: Double {
         get {
             return Double(display.text!)!
