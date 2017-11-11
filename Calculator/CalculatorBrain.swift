@@ -14,10 +14,6 @@ func changeSign(operand: Double) -> Double {
     return -operand
 }
 
-func multiply(op1: Double, op2: Double) -> Double {
-    return op1 * op2
-}
-
 
 // structs are passed by value. They are copied every time they are created.
 // they are different from classes. Classes are passed by reference and live on the heap. Methods of classes
@@ -56,8 +52,11 @@ struct CalculatorBrain {
             "e" : Operation.constant(M_E),
             "√" : Operation.unaryOperation(sqrt),
             "cos" : Operation.unaryOperation(cos),
-            "±" : Operation.unaryOperation(changeSign),
-            "×" : Operation.binaryOperation(multiply),
+            "±" : Operation.unaryOperation({ -$0 }),
+            "×" : Operation.binaryOperation({ $0 * $1 }),
+            "+" : Operation.binaryOperation({ $0 + $1 }),
+            "−" : Operation.binaryOperation({ $0 - $1 }),
+            "÷" : Operation.binaryOperation({ $0 / $1 }),
             "=" : Operation.equals
     ]
     
