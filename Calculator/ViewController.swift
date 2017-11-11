@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     // MARK - Properties
     var userIsInMiddleOfTyping = false
     
+    // calculator brain
+    private var brain = CalculatorBrain()
+    
     // computed property
     // converts the text in the display to a Double
     // displays values in the display as a String
@@ -51,22 +54,17 @@ class ViewController: UIViewController {
     
     @IBAction func performCalculation(_ sender: UIButton) {
         
-        // user is not typing a number when
-        // touches a calculation button
-        userIsInMiddleOfTyping = false
-        
-        // optional binding to check the title
-        // of the button with a math symbol
-        if let mathSymbol = sender.currentTitle {
-            switch mathSymbol {
-            case "π":
-                displayValue = Double.pi
-            case "√":
-                displayValue = sqrt(displayValue)
-            default:
-                break
-            }
+        if userIsInMiddleOfTyping {
+            brain.setOperand(displayValue)
+            userIsInMiddleOfTyping = false
         }
+        if let mathematicalSymbol = sender.currentTitle {
+            brain.performOperation(mathematicalSymbol)
+        }
+        if let result = brain.result {
+            displayValue = result
+        }
+        
     }
 }
 

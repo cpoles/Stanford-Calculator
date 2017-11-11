@@ -56,6 +56,7 @@
 		7767361C1FB315A7007DCE7B /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				776736291FB315A7007DCE7B /* Info.plist */,
 				7767361F1FB315A7007DCE7B /* ViewController.swift */,
 				776736211FB315A7007DCE7B /* Main.storyboard */,
 				777F6A961FB6A62A00D5ADCD /* CalculatorBrain.swift */,
@@ -70,7 +71,6 @@
 				7767361D1FB315A7007DCE7B /* AppDelegate.swift */,
 				776736241FB315A7007DCE7B /* Assets.xcassets */,
 				776736261FB315A7007DCE7B /* LaunchScreen.storyboard */,
-				776736291FB315A7007DCE7B /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
