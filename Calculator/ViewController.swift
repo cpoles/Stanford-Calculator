@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     // MARK: - Action Methods
     @IBAction func touchDigit(_ sender: UIButton) {
         // the title of button touched
-        let digit = sender.currentTitle!
+        var digit = sender.currentTitle!
         
         // if the user is typing, append the numbers
         // and display it
@@ -57,10 +57,20 @@ class ViewController: UIViewController {
             }
             
         } else {
-            // initial case. once the user enters a number
+            // initial case. when the user has not typed yet (userIsInMiddleOftyping = false)
             // it clears the label and enter the first number
-            userIsInMiddleOfTyping = true
-            display.text = digit
+            
+            // if the first digit is a dot, enter "0." and wait for the next entry
+            if digit == "." {
+                digit = "0."
+                // user now is typing
+                userIsInMiddleOfTyping = true
+                display.text = digit
+                
+            } else {
+                userIsInMiddleOfTyping = true
+                display.text = digit
+            }
         }
     }
     
