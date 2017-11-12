@@ -69,5 +69,13 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    @IBAction func clearDisplay(_ sender: UIButton) {
+        
+        print("clear Button is working")
+    }
+    
+    
+    
 }
 
