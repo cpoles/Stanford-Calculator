@@ -41,12 +41,17 @@ struct CalculatorBrain {
         }
     }
     
+    
     private var operations: [String : Operation] = [
             "π" : Operation.constant(Double.pi),
             "e" : Operation.constant(M_E),
             "√" : Operation.unaryOperation(sqrt),
             "cos" : Operation.unaryOperation(cos),
+            "sin" : Operation.unaryOperation(sin),
+            "x⁻¹" : Operation.unaryOperation({ 1/$0 }),
             "±" : Operation.unaryOperation({ -$0 }),
+            "xⁿ" : Operation.binaryOperation(pow),
+            "10ⁿ" : Operation.binaryOperation(pow),
             "×" : Operation.binaryOperation({ $0 * $1 }),
             "+" : Operation.binaryOperation({ $0 + $1 }),
             "−" : Operation.binaryOperation({ $0 - $1 }),
@@ -56,8 +61,13 @@ struct CalculatorBrain {
     
     private var pendingBinaryOperation: PendingBinaryOperation? // optional as we are not always on a binary operation
     
+    
     // as this function will change the struct, it must be marked as mutating
     mutating func performOperation(_ symbol: String) {
+        
+        // Set accumulator to 10 to perform 10ⁿ operation
+        if symbol == "10ⁿ" { accumulator = 10 }
+        
         if let operation = operations[symbol] {
             
             switch operation {

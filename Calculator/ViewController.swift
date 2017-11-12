@@ -29,8 +29,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private var operandSequenceString: String = ""
-    
     
     // MARK: - Outlets
     @IBOutlet weak var display: UILabel!
@@ -83,12 +81,12 @@ class ViewController: UIViewController {
     
     @IBAction func clearDisplay(_ sender: UIButton) {
         
-//        // user is no longer typing
-//        userIsInMiddleOfTyping = false
-//        // set display value to default
-//        displayValue = 0.0
-//        // set operand
-//        brain.setOperand(displayValue)
+        // user is no longer typing
+        userIsInMiddleOfTyping = false
+        // set display value to default
+        displayValue = 0.0
+        // set operand
+        brain.setOperand(displayValue)
         
         print("clear Button is working")
     }

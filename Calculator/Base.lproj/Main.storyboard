@@ -61,7 +61,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="86.5" height="72.5"/>
                                                         <color key="backgroundColor" red="0.43879850910000001" green="1" blue="0.080440818119999993" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                        <state key="normal" title="x²">
+                                                        <state key="normal" title="xⁿ">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <connections>
