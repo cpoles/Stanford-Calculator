@@ -33,6 +33,9 @@ class ViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet weak var display: UILabel!
     
+    @IBOutlet weak var operandSeqDisplay: UILabel!
+    
+    
     
     // MARK: - Action Methods
     @IBAction func touchDigit(_ sender: UIButton) {
