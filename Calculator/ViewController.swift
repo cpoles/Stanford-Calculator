@@ -29,6 +29,8 @@ class ViewController: UIViewController {
         }
     }
     
+    private var operandSequenceString: String = ""
+    
     
     // MARK: - Outlets
     @IBOutlet weak var display: UILabel!
@@ -46,7 +48,16 @@ class ViewController: UIViewController {
         // and display it
         if userIsInMiddleOfTyping {
             let textCurrentlyInDisplay = display.text!
-            display.text = textCurrentlyInDisplay + digit
+            
+            // Allowing only "legal" floating points. No multiple dots.
+            // if it already contains a dot. Ignore it and do not change the display
+            if textCurrentlyInDisplay.contains(".") && digit == "." {
+                display.text = textCurrentlyInDisplay
+            } else {
+                // otherwise, append the digit after the dot
+                display.text = textCurrentlyInDisplay + digit
+            }
+            
         } else {
             // initial case. once the user enters a number
             // it clears the label and enter the first number
@@ -71,6 +82,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clearDisplay(_ sender: UIButton) {
+        
+//        // user is no longer typing
+//        userIsInMiddleOfTyping = false
+//        // set display value to default
+//        displayValue = 0.0
+//        // set operand
+//        brain.setOperand(displayValue)
         
         print("clear Button is working")
     }

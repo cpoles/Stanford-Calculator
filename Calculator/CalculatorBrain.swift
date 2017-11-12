@@ -8,12 +8,6 @@
 
 import Foundation
 
-// external functions for math operations
-
-func changeSign(operand: Double) -> Double {
-    return -operand
-}
-
 
 // structs are passed by value. They are copied every time they are created.
 // they are different from classes. Classes are passed by reference and live on the heap. Methods of classes
