@@ -61,10 +61,15 @@ struct CalculatorBrain {
     
     private var pendingBinaryOperation: PendingBinaryOperation? // optional as we are not always on a binary operation
     
+    private var resultIsPending: Bool = false // flag to check if there is a binary operation pending
+    
+    private var description: String? // it describes the sequence of operations and operands that led to the value returned by result
+    
     
     // as this function will change the struct, it must be marked as mutating
     mutating func performOperation(_ symbol: String) {
         
+
         // Set accumulator to 10 to perform 10ⁿ operation
         if symbol == "10ⁿ" { accumulator = 10 }
         
@@ -80,13 +85,25 @@ struct CalculatorBrain {
                 }
             case.binaryOperation(let function):
                 if accumulator != nil {
-                    // get the current operand and the desired operation
-                    pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
-                    // clear the accumulator to receive the second operand
-                    accumulator = nil
+                    
+                    if resultIsPending {
+                        // perform the operation
+                        performPendingBinaryOperation()
+                        // create the new operation having the result (the accumulator)of the first and the firstOperand
+                        pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                        
+                    } else {
+                        // the initial case. Whenever a new operation starts, it sets the pending result to true.
+                        resultIsPending = true
+                        // get the current operand and the desired operation
+                        pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                        // reset the accumulator
+                        accumulator = nil
+                    }
+                    
                 }
             case.equals:
-                performPendingBinaryOperation()
+                    performPendingBinaryOperation()
             }
         
         }
@@ -113,7 +130,4 @@ struct CalculatorBrain {
             return accumulator
         }
     }
-    
-    
-    
 }
