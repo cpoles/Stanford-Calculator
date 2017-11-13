@@ -119,8 +119,10 @@ struct CalculatorBrain {
     }
     
     // as this function will change the struct, it must be marked as mutating
-    mutating func setOperand(_ operand: Double) {
-        accumulator = operand
+    mutating func setOperand(_ operand: Double?) {
+        // use the nil coalescence operator
+        
+        accumulator = operand != nil ? operand! : 0
     }
     
     

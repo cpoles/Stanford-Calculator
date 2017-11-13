@@ -96,7 +96,7 @@ class ViewController: UIViewController {
         // set display value to default
         displayValue = 0.0
         // set operand
-        brain.setOperand(displayValue)
+        brain.setOperand(nil)
         
         print("clear Button is working")
     }
