@@ -63,15 +63,15 @@ struct CalculatorBrain {
     
     private var resultIsPending: Bool = false // flag to check if there is a binary operation pending
     
-    private var description: String? // it describes the sequence of operations and operands that led to the value returned by result
+    var description: String = String()// it describes the sequence of operations and operands that led to the value returned by result
     
     
     // as this function will change the struct, it must be marked as mutating
     mutating func performOperation(_ symbol: String) {
-        
 
         // Set accumulator to 10 to perform 10ⁿ operation
         if symbol == "10ⁿ" { accumulator = 10 }
+        
         
         if let operation = operations[symbol] {
             
@@ -87,6 +87,15 @@ struct CalculatorBrain {
                 if accumulator != nil {
                     
                     if resultIsPending {
+                        // remove the "..." from the description
+                        if description.contains("...") {
+                            let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                            
+                            description.removeSubrange(range)
+                            description += String(accumulator!) + "..."
+                            print(description)
+                        }
+                        
                         // perform the operation
                         performPendingBinaryOperation()
                         // create the new operation having the result (the accumulator)of the first and the firstOperand
@@ -94,9 +103,17 @@ struct CalculatorBrain {
                         
                     } else {
                         // the initial case. Whenever a new operation starts, it sets the pending result to true.
-                        resultIsPending = true
+                        
                         // get the current operand and the desired operation
                         pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                        
+                        // now the result is pending
+                        resultIsPending = true
+                        
+                        // add ... to the description to demonstrate the waiting for a value
+                        description += String(accumulator!) + symbol + "..."
+                        print(description)
+                        
                         // reset the accumulator
                         accumulator = nil
                     }
@@ -104,6 +121,7 @@ struct CalculatorBrain {
                 }
             case.equals:
                     performPendingBinaryOperation()
+                
             }
         
         }
@@ -113,6 +131,7 @@ struct CalculatorBrain {
         if pendingBinaryOperation != nil && accumulator != nil {
             // perform the operation with the second operand in the accumulator and update the accumulator
             accumulator = pendingBinaryOperation!.perform(with: accumulator!)
+            
             // set the operation as nil as it is finished
             pendingBinaryOperation = nil
         }
@@ -121,8 +140,13 @@ struct CalculatorBrain {
     // as this function will change the struct, it must be marked as mutating
     mutating func setOperand(_ operand: Double?) {
         // use the nil coalescence operator
+        accumulator = operand != nil ? operand! : nil
         
-        accumulator = operand != nil ? operand! : 0
+        // if the accumulator is nil (when the clear button is pressed)
+        // then end all pending operations are nil
+        if accumulator  == nil {
+            pendingBinaryOperation = nil
+        }
     }
     
     

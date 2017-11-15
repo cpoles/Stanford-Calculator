@@ -58,19 +58,16 @@ class ViewController: UIViewController {
             
         } else {
             // initial case. when the user has not typed yet (userIsInMiddleOftyping = false)
-            // it clears the label and enter the first number
-            
-            // if the first digit is a dot, enter "0." and wait for the next entry
+            // if the first digit typed is a dot, enter "0." and wait for the next entry
             if digit == "." {
                 digit = "0."
                 // user now is typing
                 userIsInMiddleOfTyping = true
                 display.text = digit
-                
-            } else {
+            }
+
                 userIsInMiddleOfTyping = true
                 display.text = digit
-            }
         }
     }
     
@@ -97,6 +94,8 @@ class ViewController: UIViewController {
         displayValue = 0.0
         // set operand
         brain.setOperand(nil)
+        // reset the description string
+        brain.description = String()
         
         print("clear Button is working")
     }
