@@ -75,13 +75,16 @@ class ViewController: UIViewController {
         
         if userIsInMiddleOfTyping {
             brain.setOperand(displayValue)
+            operandSeqDisplay.text = brain.description
             userIsInMiddleOfTyping = false
         }
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
+            operandSeqDisplay.text = brain.description
         }
         if let result = brain.result {
             displayValue = result
+            operandSeqDisplay.text = brain.description
         }
         
     }
@@ -92,10 +95,10 @@ class ViewController: UIViewController {
         userIsInMiddleOfTyping = false
         // set display value to default
         displayValue = 0.0
+        operandSeqDisplay.text = "0"
         // set operand
         brain.setOperand(nil)
-        // reset the description string
-        brain.description = String()
+        
         
         print("clear Button is working")
     }

@@ -81,6 +81,7 @@ struct CalculatorBrain {
                 accumulator = value
             case.unaryOperation(let function):
                 if accumulator != nil {
+                    description += symbol + "(" + String(accumulator!) + ")"
                     accumulator = function(accumulator!)
                 }
             case.binaryOperation(let function):
@@ -92,8 +93,10 @@ struct CalculatorBrain {
                             let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                             
                             description.removeSubrange(range)
-                            description += String(accumulator!) + "..."
-                            print(description)
+                            // if the accumulator is equal to π and it is the second operand
+                            printAccumulatorAsPiSymbol(symbol)
+                        } else {
+                            printAccumulatorAsPiSymbol(symbol)
                         }
                         
                         // perform the operation
@@ -110,9 +113,9 @@ struct CalculatorBrain {
                         // now the result is pending
                         resultIsPending = true
                         
-                        // add ... to the description to demonstrate the waiting for a value
-                        description += String(accumulator!) + symbol + "..."
-                        print(description)
+                        // print Double.pi as π
+                        // if the accumulator is equal to π and it is the first operand
+                        printAccumulatorAsPiSymbol(symbol)
                         
                         // reset the accumulator
                         accumulator = nil
@@ -120,10 +123,37 @@ struct CalculatorBrain {
                     
                 }
             case.equals:
-                    performPendingBinaryOperation()
+                // remove the "..." from the description
+                if description.contains("...") {
+                    let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                    
+                    description.removeSubrange(range)
+                    if accumulator == Double.pi {
+                        description += "π" + "="
+                    } else {
+                        description += String(accumulator!) + "="
+                    }
+                    print(description)
+                }
+                performPendingBinaryOperation()
                 
-            }
+            } //end switch
         
+        }
+    }
+    
+    private mutating func printAccumulatorAsPiSymbol (_ mathSymbol: String) {
+        // if the accumulator is equal to π and it is the first operand
+        if accumulator == Double.pi {
+            description += "π" + mathSymbol + "..."
+            print(description)
+        } else if mathSymbol == "10ⁿ" {
+            description += mathSymbol + "..."
+            print(description)
+        } else {
+            // add ... to the description to demonstrate the waiting for a value
+            description += String(accumulator!) + mathSymbol + "..."
+            print(description)
         }
     }
     
@@ -145,6 +175,7 @@ struct CalculatorBrain {
         // if the accumulator is nil (when the clear button is pressed)
         // then end all pending operations are nil
         if accumulator  == nil {
+            description = String()
             pendingBinaryOperation = nil
         }
     }
