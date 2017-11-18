@@ -27,6 +27,7 @@ struct CalculatorBrain {
         case constant(Double)
         case unaryOperation((Double) -> Double)
         case binaryOperation((Double, Double) -> Double)
+        case random
         case equals
     }
     
@@ -56,6 +57,7 @@ struct CalculatorBrain {
             "+" : Operation.binaryOperation({ $0 + $1 }),
             "−" : Operation.binaryOperation({ $0 - $1 }),
             "÷" : Operation.binaryOperation({ $0 / $1 }),
+            "rdm": Operation.random,
             "=" : Operation.equals
     ]
     
@@ -120,8 +122,17 @@ struct CalculatorBrain {
                         // reset the accumulator
                         accumulator = nil
                     }
-                    
                 }
+            case.random:
+                
+                accumulator = Double(arc4random_uniform(10))
+                if accumulator != nil {
+                    if !resultIsPending {
+                        resultIsPending = true
+                        description = String(accumulator!)
+                    }
+                }
+
             case.equals:
                 // remove the "..." from the description
                 if description.contains("...") {
@@ -138,7 +149,6 @@ struct CalculatorBrain {
                 performPendingBinaryOperation()
                 
             } //end switch
-        
         }
     }
     
