@@ -105,7 +105,10 @@ class ViewController: UIViewController {
     
     @IBAction func backSpaceDelete(_ sender: UIButton) {
         
-        print("backspace pressed.")
+        if userIsInMiddleOfTyping {
+            display.text = "0"
+            userIsInMiddleOfTyping = false
+        }
         
     }
     
