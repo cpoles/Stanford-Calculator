@@ -100,6 +100,7 @@ class ViewController: UIViewController {
         brain.setOperand(nil)
         
         
+        
         print("clear Button is working")
     }
     

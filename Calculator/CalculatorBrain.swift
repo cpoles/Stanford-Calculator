@@ -17,7 +17,24 @@ import Foundation
 struct CalculatorBrain {
     
     // the accumulator of the calculator
-    private var accumulator: Double?
+    private var accumulator: Double? {
+        
+        willSet {
+            if let newAcc = newValue {
+                print("accumulator will be set to: \(newAcc)")
+            } else {
+                print("accumulator is nil.")
+            }
+        }
+        
+        didSet {
+            if let newAcc = accumulator {
+                print("accumulator is now: \(newAcc)")
+            } else {
+                print("accumulator is nil.")
+            }
+        }
+    }
     
     private enum Operation {
         // use associated values as in the Optional type.
@@ -81,8 +98,35 @@ struct CalculatorBrain {
                 accumulator = value
             case.unaryOperation(let function):
                 if accumulator != nil {
-                    description += symbol + "(" + String(accumulator!) + ")"
+                    
+                    var auxDescription: String = ""
+                    
+                    if description.contains("="){
+                        for c: Character in description {
+                            
+                            if c == "=" {
+                                continue
+                            } else {
+                                auxDescription.append(c)
+                            }
+                        }
+                        print(auxDescription)
+                        description = symbol + "(" + auxDescription + ")" + "="
+                        
+                        
+                    } else if description.contains("...") {
+                            let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                            
+                            description.removeSubrange(range)
+                            description += symbol + "(" + String(accumulator!) + ")" + "..."
+                        
+                    } else {
+                        description += symbol + "(" + String(accumulator!) + ")"
+                        
+                    }
+                    
                     accumulator = function(accumulator!)
+                    resultIsPending = false
                 }
             case.binaryOperation(let function):
                 if accumulator != nil {
@@ -94,9 +138,11 @@ struct CalculatorBrain {
                             
                             description.removeSubrange(range)
                             // if the accumulator is equal to π and it is the second operand
-                            printAccumulatorAsPiSymbol(symbol)
+                            description += String(accumulator!) + symbol + "..."
+                            
                         } else {
-                            printAccumulatorAsPiSymbol(symbol)
+                           
+                            
                         }
                         
                         // perform the operation
@@ -113,9 +159,11 @@ struct CalculatorBrain {
                         // now the result is pending
                         resultIsPending = true
                         
+                        
                         // print Double.pi as π
                         // if the accumulator is equal to π and it is the first operand
-                        printAccumulatorAsPiSymbol(symbol)
+                        description += String(accumulator!) + symbol + "..."
+                        print(description)
                         
                         // reset the accumulator
                         accumulator = nil
@@ -128,14 +176,19 @@ struct CalculatorBrain {
                     let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                     
                     description.removeSubrange(range)
-                    if accumulator == Double.pi {
-                        description += "π" + "="
-                    } else {
-                        description += String(accumulator!) + "="
-                    }
+//                    if accumulator == Double.pi {
+//                        description += "π" + "="
+//
+//                    }
+                        // get the accumulator string before it is changed by the operation
+                    description += String(accumulator!) + "="
+                    
                     print(description)
+                } else {
+                    description += "="
                 }
                 performPendingBinaryOperation()
+                resultIsPending = false
                 
             } //end switch
         
@@ -176,6 +229,7 @@ struct CalculatorBrain {
         // then end all pending operations are nil
         if accumulator  == nil {
             description = String()
+            resultIsPending = false
             pendingBinaryOperation = nil
         }
     }
