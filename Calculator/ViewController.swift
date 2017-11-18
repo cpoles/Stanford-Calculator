@@ -100,8 +100,7 @@ class ViewController: UIViewController {
         brain.setOperand(nil)
         
         
-        
-        print("clear Button is working")
+        print("clear Button pressed.")
     }
     
     @IBAction func backSpaceDelete(_ sender: UIButton) {
