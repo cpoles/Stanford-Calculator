@@ -103,6 +103,13 @@ class ViewController: UIViewController {
         print("clear Button is working")
     }
     
+    @IBAction func backSpaceDelete(_ sender: UIButton) {
+        
+        print("backspace pressed.")
+        
+    }
+    
+    
     
     
 }
