@@ -29,6 +29,16 @@ class ViewController: UIViewController {
         }
     }
     
+    func resetCalulator() {
+        // user is no longer typing
+        userIsInMiddleOfTyping = false
+        // set display value to default
+        displayValue = 0.0
+        operandSeqDisplay.text = "0"
+        // set operand
+        brain.setOperand(nil)
+    }
+    
     
     // MARK: - Outlets
     @IBOutlet weak var display: UILabel!
@@ -91,24 +101,22 @@ class ViewController: UIViewController {
     
     @IBAction func clearDisplay(_ sender: UIButton) {
         
-        // user is no longer typing
-        userIsInMiddleOfTyping = false
-        // set display value to default
-        displayValue = 0.0
-        operandSeqDisplay.text = "0"
-        // set operand
-        brain.setOperand(nil)
-        
-        
-        print("clear Button pressed.")
+        resetCalulator()
+
     }
     
     @IBAction func backSpaceDelete(_ sender: UIButton) {
-        
+
+        //
         if userIsInMiddleOfTyping {
-            display.text = "0"
-            userIsInMiddleOfTyping = false
+            if display.text!.count == 0 {
+                display.text = "0"
+            }
+            display.text!.remove(at: display.text!.index(before: display.text!.endIndex))
             print("backSpace button pressed.")
+        } else {
+            // if backsapce is pressed in a final result
+            resetCalulator()
         }
         
     }
