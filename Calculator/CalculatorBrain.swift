@@ -98,6 +98,13 @@ struct CalculatorBrain {
             // access the associated value of the enum case constant
             case .constant(let value):
                 accumulator = value
+                if resultIsPending {
+                    description += String(accumulator!)
+                } else {
+                    description += " "
+                }
+                
+                
             case.unaryOperation(let function):
                 if accumulator != nil {
                     
@@ -173,8 +180,13 @@ struct CalculatorBrain {
                 }
             case.random(let function):
                 
-              
                 accumulator = Double(function(10))
+                
+                if accumulator != nil {
+                    if !resultIsPending {
+                         description += " "
+                    } 
+                }
              
             case.equals:
                 // remove the "..." from the description
