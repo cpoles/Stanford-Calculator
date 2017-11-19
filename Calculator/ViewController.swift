@@ -115,7 +115,7 @@ class ViewController: UIViewController {
             display.text!.remove(at: display.text!.index(before: display.text!.endIndex))
             print("backSpace button pressed.")
         } else {
-            // if backsapce is pressed in a final result
+            // if backsapce is pressed in a final result or in the middle of an operation
             resetCalulator()
         }
         

@@ -173,8 +173,9 @@ struct CalculatorBrain {
                 }
             case.random(let function):
                 
+              
                 accumulator = Double(function(10))
-
+             
             case.equals:
                 // remove the "..." from the description
                 if description.contains("...") {
