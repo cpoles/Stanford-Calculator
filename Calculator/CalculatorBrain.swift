@@ -8,12 +8,6 @@
 
 import Foundation
 
-
-// structs are passed by value. They are copied every time they are created.
-// they are different from classes. Classes are passed by reference and live on the heap. Methods of classes
-// reference the same "copy" of thclass in the heap.
-
-
 struct CalculatorBrain {
     
     // the accumulator of the calculator
@@ -23,7 +17,7 @@ struct CalculatorBrain {
             if let newAcc = newValue {
                 print("accumulator will be set to: \(newAcc)")
             } else {
-                print("accumulator is nil.")
+                print("accumulator will be set to nil.")
             }
         }
         
@@ -59,7 +53,6 @@ struct CalculatorBrain {
         }
     }
     
-    
     private var operations: [String : Operation] = [
             "π" : Operation.constant(Double.pi),
             "e" : Operation.constant(M_E),
@@ -91,7 +84,6 @@ struct CalculatorBrain {
         // Set accumulator to 10 to perform 10ⁿ operation
         if symbol == "10ⁿ" { accumulator = 10 }
         
-        
         if let operation = operations[symbol] {
             
             switch operation {
@@ -121,14 +113,13 @@ struct CalculatorBrain {
                         description = symbol + "(" + auxDescription + ")" + "="
         
                     } else if description.contains("...") {
-                            let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
-                            
-                            description.removeSubrange(range)
-                            description += symbol + "(" + String(accumulator!) + ")" + "..."
+                        let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                        
+                        description.removeSubrange(range)
+                        description += symbol + "(" + String(accumulator!) + ")" + "..."
                         
                     } else {
                         description += symbol + "(" + String(accumulator!) + ")"
-                        
                     }
                     
                     accumulator = function(accumulator!)
@@ -141,35 +132,48 @@ struct CalculatorBrain {
                         // remove the "..." from the description
                         if description.contains("...") {
                             let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
-                            
                             description.removeSubrange(range)
-                            // if the accumulator is equal to π and it is the second operand
+                            
                             description += String(accumulator!) + symbol + "..."
                             
                         } else {
-                           
+                            description += String(accumulator!) + symbol + "..."
                             
                         }
                         // perform the operation
                         performPendingBinaryOperation()
-                        // create the new operation having the result (the accumulator)of the first and the firstOperand
+                        // create the new operation having the result (the accumulator)of the first operation as firstOperand
                         pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
                         
                     } else {
-                        // the initial case. Whenever a new operation starts, it sets the pending result to true.
                         
-                        // get the current operand and the desired operation
-                        pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
-                        
-                        // now the result is pending
-                        resultIsPending = true
-                        // print Double.pi as π
-                        // if the accumulator is equal to π and it is the first operand
-                        description += String(accumulator!) + symbol + "..."
-                        print(description)
-                        
-                        // reset the accumulator
-                        accumulator = nil
+                        if description.contains("=") {
+                            description.removeLast()
+                            description += symbol
+                            
+                            // get the current operand and the desired operation
+                            pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                            
+                            resultIsPending = true
+                            
+                            // reset the accumulator
+                            accumulator = nil
+                            
+                        } else {
+                            
+                            // get the current operand and the desired operation
+                            pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                            
+                            // now the result is pending
+                            resultIsPending = true
+                            // print Double.pi as π
+                            // if the accumulator is equal to π and it is the first operand
+                            description += String(accumulator!) + symbol + "..."
+                            print(description)
+                            
+                            // reset the accumulator
+                            accumulator = nil
+                        }
                     }
                 }
             case.random(let function):
@@ -187,18 +191,21 @@ struct CalculatorBrain {
                     let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                     
                     description.removeSubrange(range)
-//                    if accumulator == Double.pi {
-//                        description += "π" + "="
-//
-//                    }
-                        // get the accumulator string before it is changed by the operation
-                    description += String(accumulator!) + "="
                     
-                    print(description)
+                    if accumulator == Double.pi {
+                        description += "π" + "="
+                    } else if description.contains("√") {
+                        description += "="
+                    } else {
+                        // get the accumulator string before it is changed by the operation
+                        description += String(accumulator!) + "="
+                    }
                 } else {
-                    description += "="
+                    description += String(accumulator!) + "="
                 }
+                
                 performPendingBinaryOperation()
+                print(description)
                 resultIsPending = false
                 
             } //end switch
@@ -243,8 +250,6 @@ struct CalculatorBrain {
             pendingBinaryOperation = nil
         }
     }
-    
-    
     // make the result read-only
     var result: Double? {
         get {
