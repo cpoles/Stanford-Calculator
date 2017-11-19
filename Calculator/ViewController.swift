@@ -25,7 +25,10 @@ class ViewController: UIViewController {
         }
         
         set {
-            display.text = String(newValue)
+            let numberFormatter = NumberFormatter()
+            numberFormatter.maximumSignificantDigits = 6
+            let value = NSNumber(floatLiteral: newValue)
+            display.text = numberFormatter.string(from: value)
         }
     }
     

@@ -80,7 +80,11 @@ struct CalculatorBrain {
     
     // as this function will change the struct, it must be marked as mutating
     mutating func performOperation(_ symbol: String) {
-
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumSignificantDigits = 6
+        
+        
         // Set accumulator to 10 to perform 10ⁿ operation
         if symbol == "10ⁿ" { accumulator = 10 }
         
@@ -97,6 +101,9 @@ struct CalculatorBrain {
                 }
             case.unaryOperation(let function):
                 if accumulator != nil {
+                    
+                    let value = NSNumber(floatLiteral: accumulator!)
+                    let formattedAccumulator = numberFormatter.string(from: value)
                     
                     var auxDescription: String = ""
                     
@@ -116,10 +123,10 @@ struct CalculatorBrain {
                         let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                         
                         description.removeSubrange(range)
-                        description += symbol + "(" + String(accumulator!) + ")" + "..."
+                        description += symbol + "(" + formattedAccumulator! + ")" + "..."
                         
                     } else {
-                        description += symbol + "(" + String(accumulator!) + ")"
+                        description += symbol + "(" + formattedAccumulator! + ")"
                     }
                     
                     accumulator = function(accumulator!)
@@ -128,16 +135,19 @@ struct CalculatorBrain {
             case.binaryOperation(let function):
                 if accumulator != nil {
                     
+                    let value = NSNumber(floatLiteral: accumulator!)
+                    let formattedAccumulator = numberFormatter.string(from: value)
+                    
                     if resultIsPending {
                         // remove the "..." from the description
                         if description.contains("...") {
                             let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                             description.removeSubrange(range)
                             
-                            description += String(accumulator!) + symbol + "..."
+                            description += formattedAccumulator! + symbol + "..."
                             
                         } else {
-                            description += String(accumulator!) + symbol + "..."
+                            description += formattedAccumulator! + symbol + "..."
                             
                         }
                         // perform the operation
@@ -168,7 +178,7 @@ struct CalculatorBrain {
                             resultIsPending = true
                             // print Double.pi as π
                             // if the accumulator is equal to π and it is the first operand
-                            description += String(accumulator!) + symbol + "..."
+                            description += formattedAccumulator! + symbol + "..."
                             print(description)
                             
                             // reset the accumulator
@@ -186,6 +196,9 @@ struct CalculatorBrain {
                     }
                 }
             case.equals:
+                
+                let value = NSNumber(floatLiteral: accumulator!)
+                let formattedAccumulator = numberFormatter.string(from: value)
                 // remove the "..." from the description
                 if description.contains("...") {
                     let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
@@ -198,10 +211,10 @@ struct CalculatorBrain {
                         description += "="
                     } else {
                         // get the accumulator string before it is changed by the operation
-                        description += String(accumulator!) + "="
+                        description += formattedAccumulator! + "="
                     }
                 } else {
-                    description += String(accumulator!) + "="
+                    description += formattedAccumulator! + "="
                 }
                 
                 performPendingBinaryOperation()
@@ -209,21 +222,6 @@ struct CalculatorBrain {
                 resultIsPending = false
                 
             } //end switch
-        }
-    }
-    
-    private mutating func printAccumulatorAsPiSymbol (_ mathSymbol: String) {
-        // if the accumulator is equal to π and it is the first operand
-        if accumulator == Double.pi {
-            description += "π" + mathSymbol + "..."
-            print(description)
-        } else if mathSymbol == "10ⁿ" {
-            description += mathSymbol + "..."
-            print(description)
-        } else {
-            // add ... to the description to demonstrate the waiting for a value
-            description += String(accumulator!) + mathSymbol + "..."
-            print(description)
         }
     }
     
