@@ -119,8 +119,7 @@ struct CalculatorBrain {
                         }
                         print(auxDescription)
                         description = symbol + "(" + auxDescription + ")" + "="
-                        
-                        
+        
                     } else if description.contains("...") {
                             let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
                             
@@ -151,7 +150,6 @@ struct CalculatorBrain {
                            
                             
                         }
-                        
                         // perform the operation
                         performPendingBinaryOperation()
                         // create the new operation having the result (the accumulator)of the first and the firstOperand
@@ -165,8 +163,6 @@ struct CalculatorBrain {
                         
                         // now the result is pending
                         resultIsPending = true
-                        
-                        
                         // print Double.pi as π
                         // if the accumulator is equal to π and it is the first operand
                         description += String(accumulator!) + symbol + "..."
@@ -185,7 +181,6 @@ struct CalculatorBrain {
                          description += " "
                     }
                 }
-             
             case.equals:
                 // remove the "..." from the description
                 if description.contains("...") {

@@ -109,10 +109,11 @@ class ViewController: UIViewController {
 
         //
         if userIsInMiddleOfTyping {
-            if display.text!.count == 0 {
-                display.text = "0"
-            }
             display.text!.remove(at: display.text!.index(before: display.text!.endIndex))
+            if display.text!.count == 0 {
+                display.text = " "
+                userIsInMiddleOfTyping = false
+            }
             print("backSpace button pressed.")
         } else {
             // if backsapce is pressed in a final result or in the middle of an operation
