@@ -45,8 +45,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var operandSeqDisplay: UILabel!
     
-    
-    
     // MARK: - Action Methods
     @IBAction func touchDigit(_ sender: UIButton) {
         // the title of button touched
@@ -100,10 +98,20 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clearDisplay(_ sender: UIButton) {
-        
         resetCalulator()
-
     }
+    
+    @IBAction func clearAccumulator(_ sender: UIButton) {
+        if userIsInMiddleOfTyping {
+            display.text = " "
+            userIsInMiddleOfTyping = false
+            print("clear accumulator button pressed.")
+        } else {
+            // if  pressed in a final result or in the middle of an operation
+            resetCalulator()
+        }
+    }
+    
     
     @IBAction func backSpaceDelete(_ sender: UIButton) {
 
