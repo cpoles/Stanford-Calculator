@@ -98,13 +98,11 @@ struct CalculatorBrain {
             // access the associated value of the enum case constant
             case .constant(let value):
                 accumulator = value
-                if resultIsPending {
-                    description += String(accumulator!)
-                } else {
-                    description += " "
+                if accumulator != nil {
+                    if !resultIsPending {
+                        description += " "
+                    }
                 }
-                
-                
             case.unaryOperation(let function):
                 if accumulator != nil {
                     
@@ -185,7 +183,7 @@ struct CalculatorBrain {
                 if accumulator != nil {
                     if !resultIsPending {
                          description += " "
-                    } 
+                    }
                 }
              
             case.equals:
