@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     
     // computed property
     // converts the text in the display to a Double
-    // displays values in the display as a String
+    // displays values in the display as a formatted String with 6 significant digits
     var displayValue: Double {
         get {
             return Double(display.text!)!
@@ -32,7 +32,8 @@ class ViewController: UIViewController {
         }
     }
     
-    func resetCalulator() {
+    // function that sets the calculator to its initial state
+    private func resetCalulator() {
         // user is no longer typing
         userIsInMiddleOfTyping = false
         // set display value to default
@@ -41,7 +42,6 @@ class ViewController: UIViewController {
         // set operand
         brain.setOperand(nil)
     }
-    
     
     // MARK: - Outlets
     @IBOutlet weak var display: UILabel!
@@ -75,15 +75,16 @@ class ViewController: UIViewController {
                 // user now is typing
                 userIsInMiddleOfTyping = true
                 display.text = digit
-            }
-
+            } else {
                 userIsInMiddleOfTyping = true
                 display.text = digit
+            }
         }
     }
     
     @IBAction func performCalculation(_ sender: UIButton) {
-        
+        // if user entered a value, set the operand and update the sequence display.
+
         if userIsInMiddleOfTyping {
             brain.setOperand(displayValue)
             operandSeqDisplay.text = brain.description
@@ -110,7 +111,7 @@ class ViewController: UIViewController {
             userIsInMiddleOfTyping = false
             print("clear accumulator button pressed.")
         } else {
-            // if  pressed in a final result or in the middle of an operation
+            // if  C is pressed in a final result or in the middle of an operation
             resetCalulator()
         }
     }
@@ -118,9 +119,10 @@ class ViewController: UIViewController {
     
     @IBAction func backSpaceDelete(_ sender: UIButton) {
 
-        //
         if userIsInMiddleOfTyping {
+            // remove the last digit entered
             display.text!.remove(at: display.text!.index(before: display.text!.endIndex))
+            // if there are no more digits, clear the display
             if display.text!.count == 0 {
                 display.text = " "
                 userIsInMiddleOfTyping = false

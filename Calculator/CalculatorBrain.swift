@@ -10,7 +10,7 @@ import Foundation
 
 struct CalculatorBrain {
     
-    // the accumulator of the calculator
+    // MARK: - Properties
     private var accumulator: Double? {
         
         willSet {
@@ -30,11 +30,15 @@ struct CalculatorBrain {
         }
     }
     
+    // make the result read-only
+    var result: Double? {
+        get {
+            return accumulator
+        }
+    }
+    
     private enum Operation {
-        // use associated values as in the Optional type.
-        // Optional is an enum with two cases set and not set
-        // set has the associated value called Some
-        // not set has the associated value called None
+        
         case constant(Double)
         case unaryOperation((Double) -> Double)
         case binaryOperation((Double, Double) -> Double)
@@ -42,8 +46,7 @@ struct CalculatorBrain {
         case equals
     }
     
-    // this struct will help to handle the wait for the
-    // second operand in a binary operation
+    // struct that holds the operation and the first operand
     private struct PendingBinaryOperation {
         let function: (Double, Double) -> Double
         let firstOperand: Double
@@ -78,9 +81,11 @@ struct CalculatorBrain {
     var description: String = String()// it describes the sequence of operations and operands that led to the value returned by result
     
     
+    // - MARK: Methods
+    
     // as this function will change the struct, it must be marked as mutating
     mutating func performOperation(_ symbol: String) {
-        
+        // number Formatter
         let numberFormatter = NumberFormatter()
         numberFormatter.maximumSignificantDigits = 6
         
@@ -101,7 +106,7 @@ struct CalculatorBrain {
                 }
             case.unaryOperation(let function):
                 if accumulator != nil {
-                    
+                    // number Formatter
                     let value = NSNumber(floatLiteral: accumulator!)
                     let formattedAccumulator = numberFormatter.string(from: value)
                     
@@ -120,8 +125,8 @@ struct CalculatorBrain {
                         description = symbol + "(" + auxDescription + ")" + "="
         
                     } else if description.contains("...") {
+                        // remove the "..."
                         let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
-                        
                         description.removeSubrange(range)
                         description += symbol + "(" + formattedAccumulator! + ")" + "..."
                         
@@ -134,7 +139,7 @@ struct CalculatorBrain {
                 }
             case.binaryOperation(let function):
                 if accumulator != nil {
-                    
+                    // number Formatter
                     let value = NSNumber(floatLiteral: accumulator!)
                     let formattedAccumulator = numberFormatter.string(from: value)
                     
@@ -197,29 +202,32 @@ struct CalculatorBrain {
                 }
             case.equals:
                 
-                let value = NSNumber(floatLiteral: accumulator!)
-                let formattedAccumulator = numberFormatter.string(from: value)
-                // remove the "..." from the description
-                if description.contains("...") {
-                    let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                if accumulator != nil {
                     
-                    description.removeSubrange(range)
-                    
-                    if accumulator == Double.pi {
-                        description += "π" + "="
-                    } else if description.contains("√") {
-                        description += "="
+                    let value = NSNumber(floatLiteral: accumulator!)
+                    let formattedAccumulator = numberFormatter.string(from: value)
+                    // remove the "..." from the description
+                    if description.contains("...") {
+                        let range = description.index(description.endIndex, offsetBy: -3)..<description.endIndex
+                        
+                        description.removeSubrange(range)
+                        
+                        if accumulator == Double.pi {
+                            description += "π" + "="
+                        } else if description.contains("√") {
+                            description += "="
+                        } else {
+                            // get the accumulator string before it is changed by the operation
+                            description += formattedAccumulator! + "="
+                        }
                     } else {
-                        // get the accumulator string before it is changed by the operation
                         description += formattedAccumulator! + "="
                     }
-                } else {
-                    description += formattedAccumulator! + "="
+                    
+                    performPendingBinaryOperation()
+                    print(description)
+                    resultIsPending = false
                 }
-                
-                performPendingBinaryOperation()
-                print(description)
-                resultIsPending = false
                 
             } //end switch
         }
@@ -248,10 +256,5 @@ struct CalculatorBrain {
             pendingBinaryOperation = nil
         }
     }
-    // make the result read-only
-    var result: Double? {
-        get {
-            return accumulator
-        }
-    }
+    
 }
